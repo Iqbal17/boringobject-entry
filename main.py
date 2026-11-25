@@ -54,13 +54,20 @@ MAX_CHARS = 200
 LINE = "One star. It held my papers together for three years, then snapped the morning of my job interview."
 
 
+def _is_single_line(text):
+    """True when the entry contains no newline (one-line gate rule)."""
+    return "\n" not in text
+
+
 def check_gate(text):
     """Mirror the sealed gate: 1-200 chars, not only whitespace, one line."""
+    # Pass 3 revision: single-line check split out into _is_single_line
+    # so the gate reads as separate, reviewable rules; behaviour unchanged.
     if not 1 <= len(text) <= MAX_CHARS:
         raise ValueError("entry must be 1-200 characters")
     if not text.strip():
         raise ValueError("entry must not be only whitespace")
-    if "\n" in text:
+    if not _is_single_line(text):
         raise ValueError("entry must be a single line")
     return True
 
